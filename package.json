@@ -8,6 +8,27 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "vite build"
   },
+  "vercel": {
+    "builds": [
+      {
+        "src": "index.html",
+        "use": "@vercel/static-build",
+        "config": {
+          "zeroConfig": true
+        }
+      }
+    ],
+    "routes": [
+      {
+        "src": "/public/(.*)",
+        "dest": "/public/$1"
+      },
+      {
+        "src": "/(.*)",
+        "dest": "/index.html"
+      }
+    ]
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
