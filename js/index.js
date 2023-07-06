@@ -21,7 +21,7 @@ function init() {
 
   var loader = new GLTFLoader();
 
-  loader.load('.myearth/scene.gltf', function (gltf) {
+  loader.load('./myearth/scene.gltf', function (gltf) {
     earth = gltf.scene;
     earth.scale.set(5, 5, 5);
     earth.position.y = 0;
