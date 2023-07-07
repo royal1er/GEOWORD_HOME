@@ -5,6 +5,7 @@ import { initStars } from './stars.js';
 var container = document.getElementById('home');
 var onCharging = document.getElementById('onCharging');
 var modelLoader = document.getElementById('global-loader');
+var homeBackground = document.getElementById('home');
 var scene, camera, renderer;
 var earth; 
 var starsGroup;
@@ -21,7 +22,7 @@ function init() {
 
   var loader = new GLTFLoader();
 
-  loader.load('./myearth/scene.gltf', function (gltf) {
+  loader.load('./public/myearth/scene.gltf', function (gltf) {
     earth = gltf.scene;
     earth.scale.set(5, 5, 5);
     earth.position.y = 0;
@@ -38,6 +39,7 @@ function init() {
 
     scene.add(earth);
     
+    homeBackground.style.display = "block";
     modelLoader.style.display = "none";
     onCharging.style.display = "block";
     
@@ -48,10 +50,12 @@ function init() {
   scene.add(ambientLight);
 
   // Ajout de la lumière directionnelle
-  var directionalLight = new THREE.DirectionalLight(0xaad7ff, 10);
-  directionalLight.position.set(1, 1, 1);
+  var checkMobile = isMobile() ? [-5, 1, 1] : [1, 1, 1];
+  var directionalLight = new THREE.DirectionalLight(0xaad7ff, 20);
+  directionalLight.position.set(...checkMobile);
   scene.add(directionalLight);
-
+  console.log(...checkMobile);
+  
   // Ajout des étoiles à la scène principale
   starsGroup = initStars(scene);
 
@@ -88,8 +92,9 @@ document.addEventListener('mouseup', function() {
 function animate() {
   requestAnimationFrame(animate);
   animateElements();
-  
+  renderer.setClearColor(0x000000, 0);
   renderer.render(scene, camera);
+  
 }
 
 function animateElements() {
@@ -104,7 +109,6 @@ function animateElements() {
         earth.rotation.y += 0.001; // Ajustez la vitesse de rotation selon vos préférences
         starsGroup.rotation.x -= 0.001;
         starsGroup.rotation.y -= 0.0015;
-        console.log(starsGroup.rotation.y)
       }
     } else {
       element.classList.remove('visible');
@@ -112,4 +116,13 @@ function animateElements() {
   });
 }
 
+function isMobile() {
+  var isMobileDevice = false;
+  var mediaQuery = window.matchMedia("(max-width: 500px)");
 
+  if (mediaQuery.matches) {
+    isMobileDevice = true;
+  }
+
+  return isMobileDevice;
+}
